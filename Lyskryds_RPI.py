@@ -30,32 +30,97 @@ NSred.off()
 NSgreen.off()
 NSgul.off()
 
-def redred(x):# Udgangs punkt for lyskrydset
-    if x=="NS": #Hvis lyskrydset kommer fra NS skal den gå til EV
-        x="EV"
-        print("NS RED   EV RED")
-        NSred.on()
-        EVred.on()
-        sleep(2)
-        return EV(x)
-    elif x=="EV": #Hvis lyskrydset kommer fra EV skal den gå til NS
-        x="NS"
-        print("NS red   EV red")
-        NSred.on()
-        EVred.on()
-        sleep(2)
-        return NS(x)
-def NS():
+Sidetilside = 0
+Svingbanetur = 0
 
-def NS_green():
+def Rød():
+    global Sidetilside
+    global svingbanetur
+    NSgul.off()
+    EVgul.off()
+    print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
+    NSred.on()
+    EVred.on()
+    sleep(1)
+    if Svingbanetur == 2:
+        return SvingbaneRødGul()
+    if Sidetilside == 0:
+        return RødGulNS()
+    elif Sidetilside == 1:
+        return RødGulVØ()
+#Svingbane
+def SvingbaneRødGul():
+    print ('\x1b[6;30;43m' + "RødGul! pil" + '\x1b[0m''   \x1b[6;30;43m' + "RødGul! pil" + '\x1b[0m')
+    sleep(2)
+    return SvingbaneGrøn()
+def SvingbaneGrøn():
+    global Svingbanetur
+    print ('\x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m''   \x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
+    sleep(4)
+    Svingbanetur = 0
+    return SvingbaneGul()
+def SvingbaneGul():
+    global Svingbanetur
+    print ('\x1b[6;30;43m' + " Gul! pil  " + '\x1b[0m''   \x1b[6;30;43m' + " Gul! pil  " + '\x1b[0m')
+    sleep(1)
+    return Rød()
+#NS
+def GrønNS():
+    NSred.off()
+    NSgul.off()
+    print ('\x1b[7;32;40m' + " Grøn! Kør " + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
+    NSgreen.on()
+    sleep(1)
+    print ('\x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
+    sleep(4)
+    return GulNS()
 
-def NS_gul():
+def RødGulNS():
+    print ('\x1b[6;30;43m' + "RødGul! Kør" + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
+    NSgul.on()
+    sleep(2)
+    return GrønNS()
 
-def EV():
+def GulNS():
+    global Sidetilside
+    global Svingbanetur
+    NSgreen.off()
+    print ('\x1b[6;30;43m' + " Gul! stop " + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
+    NSgul.on()
+    sleep(1)
+    Sidetilside = 1
+    Svingbanetur += 1
+    return Rød()
 
-def EV_green():
+#VØ
+def GrønVØ():
+    EVgul.off()
+    EVred.off()
+    print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[7;32;40m' + " Grøn! Kør " + '\x1b[0m')
+    EVgreen.on()
+    sleep(1)
+    print ('              \x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
+    sleep(4)
+    return GulVØ()
 
-def EV_gul():
+def RødGulVØ():
+    print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[6;30;43m' + "RødGul! Kør" + '\x1b[0m')
+    EVgul.on()
+    sleep(2)
+    return GrønVØ()
 
-state=redred(x="EV")
-while state: state=redred(x="EV")
+def GulVØ():
+    global Sidetilside
+    global Svingbanetur
+    EVgreen.off()
+    print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[6;30;43m' + " Gul! stop " + '\x1b[0m')
+    EVgul.on()
+    sleep(1)
+    Sidetilside = 0
+    Svingbanetur += 1
+    return Rød()
+
+state=Rød()
+while state: state=Rød()  # starter statemachine
+print ("Done with states")
+
