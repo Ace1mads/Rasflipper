@@ -15,17 +15,53 @@ EVgreen=LED(16)
 EVsidegul=LED(24)
 EVsidegrøn=LED(23)
 
+NSknap = Button(17)#blå
+EVknap = Button(6)#grøn
+Slukknap = Button(12)#rød
+
 Sidetilside = 0
 Svingbanetur = 0
 
+def biloverNS():
+    sleep(0.5)
+    if NSknap.is_pressed:
+        print("Bil køre over rød NS")
+    sleep(0.5)
+    if NSknap.is_pressed:
+        print("Bil køre over for maget rød")
+        
+def biloverEV():
+    sleep(0.5)
+    if EVknap.is_pressed:
+        print("Bil køre over rød EV")
+    sleep(0.5)
+    if EVknap.is_pressed:
+        print("Bil køre over for maget rød")
+
+def Stop():
+    EVsidegul.off()
+    NSsidegul.off()
+    NSgul.off()
+    EVgul.off()
+    NSred.off()
+    EVred.off()
+    NSsidegrøn.off()
+    EVsidegrøn.off()
+    NSgreen.off()
+    EVgreen.off()
+    
 def Rød():
     global Sidetilside
     global svingbanetur
+    EVsidegul.off()
+    NSsidegul.off()
     NSgul.off()
     EVgul.off()
     print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
     NSred.on()
     EVred.on()
+    biloverEV()
+    biloverNS()
     sleep(1)
     if Svingbanetur == 2:
         return SvingbaneRødGul()
@@ -44,8 +80,6 @@ def SvingbaneGrøn():
     global Svingbanetur
     EVsidegul.off()
     NSsidegul.off()
-    EVred.off()
-    NSred.off()
     print ('\x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m''   \x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
     NSsidegrøn.on()
     EVsidegrøn.on()
@@ -68,14 +102,26 @@ def GrønNS():
     print ('\x1b[7;32;40m' + " Grøn! Kør " + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
     NSgreen.on()
     sleep(1)
+    biloverEV()
 #    print ('\x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
-    sleep(4)
+    sleep(1)
+    biloverEV()
+    sleep(1)
+    biloverEV()
+    sleep(1)
+    biloverEV()
+    sleep(1)
+    biloverEV()
+    
     return GulNS()
 
 def RødGulNS():
     print ('\x1b[6;30;43m' + "RødGul! Kør" + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
     NSgul.on()
-    sleep(2)
+    biloverEV()
+    sleep(1)
+    biloverEV()
+    Sleep(1)
     return GrønNS()
 
 def GulNS():
@@ -84,6 +130,8 @@ def GulNS():
     NSgreen.off()
     print ('\x1b[6;30;43m' + " Gul! stop " + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
     NSgul.on()
+    biloverNS()
+    biloverEV()
     sleep(1)
     Sidetilside = 1
     Svingbanetur += 1
@@ -95,15 +143,26 @@ def GrønVØ():
     EVred.off()
     print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[7;32;40m' + " Grøn! Kør " + '\x1b[0m')
     EVgreen.on()
+    biloverNS()
     sleep(1)
 #    print ('              \x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
-    sleep(4)
+    biloverNS()
+    sleep(1)
+    biloverNS()
+    sleep(1)
+    biloverNS()
+    sleep(1)
+    biloverNS()
+    sleep(1)
     return GulVØ()
 
 def RødGulVØ():
     print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[6;30;43m' + "RødGul! Kør" + '\x1b[0m')
     EVgul.on()
-    sleep(2)
+    biloverNS()
+    sleep(1)
+    biloverNS()
+    sleep(1)
     return GrønVØ()
 
 def GulVØ():
@@ -112,12 +171,17 @@ def GulVØ():
     EVgreen.off()
     print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[6;30;43m' + " Gul! stop " + '\x1b[0m')
     EVgul.on()
+    biloverEV()
+    biloverNS()
     sleep(1)
     Sidetilside = 0
     Svingbanetur += 1
     return Rød()
 
 state=Rød()
-while state: state=Rød()  # starter statemachine
-print ("Done with states")
+while True:
+    if Slukknap.is_pressed:
+        Stop()
+    while state: state=Rød()  # starter statemachine
+    print ("Done with states")
 
