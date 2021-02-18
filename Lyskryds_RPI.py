@@ -1,34 +1,19 @@
 #Statemachine til beskrivelse af livets gang
 from gpiozero import LED
+#from gpiozero import Button
 from time import sleep
 
 NSred= LED(13)
 NSgul=LED(19)
 NSgreen=LED(26)
+NSsidegul=LED(4)
+NSsidegrøn=LED(5)
+
 EVred=LED(21)
 EVgul=LED(20)
 EVgreen=LED(16)
-
-
-print("Test!")
-EVred.on()
-sleep(1)
-EVgreen.on()
-sleep(1)
-EVgul.on()
-sleep(1)
-NSred.on()
-sleep(1)
-NSgreen.on()
-sleep(1)
-NSgul.on()
-sleep(1)
-EVred.off()
-EVgreen.off()
-EVgul.off()
-NSred.off()
-NSgreen.off()
-NSgul.off()
+EVsidegul=LED(24)
+EVsidegrøn=LED(23)
 
 Sidetilside = 0
 Svingbanetur = 0
@@ -51,17 +36,29 @@ def Rød():
 #Svingbane
 def SvingbaneRødGul():
     print ('\x1b[6;30;43m' + "RødGul! pil" + '\x1b[0m''   \x1b[6;30;43m' + "RødGul! pil" + '\x1b[0m')
+    EVsidegul.on()
+    NSsidegul.on()
     sleep(2)
     return SvingbaneGrøn()
 def SvingbaneGrøn():
     global Svingbanetur
+    EVsidegul.off()
+    NSsidegul.off()
+    EVred.off()
+    NSred.off()
     print ('\x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m''   \x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
+    NSsidegrøn.on()
+    EVsidegrøn.on()
     sleep(4)
     Svingbanetur = 0
     return SvingbaneGul()
 def SvingbaneGul():
     global Svingbanetur
+    NSsidegrøn.off()
+    EVsidegrøn.off()    
     print ('\x1b[6;30;43m' + " Gul! pil  " + '\x1b[0m''   \x1b[6;30;43m' + " Gul! pil  " + '\x1b[0m')
+    EVsidegul.on()
+    NSsidegul.on()
     sleep(1)
     return Rød()
 #NS
@@ -71,7 +68,7 @@ def GrønNS():
     print ('\x1b[7;32;40m' + " Grøn! Kør " + '\x1b[0m''   \x1b[6;30;41m' + " Rød! stop " + '\x1b[0m')
     NSgreen.on()
     sleep(1)
-    print ('\x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
+#    print ('\x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
     sleep(4)
     return GulNS()
 
@@ -99,7 +96,7 @@ def GrønVØ():
     print ('\x1b[6;30;41m' + " Rød! stop " + '\x1b[0m''   \x1b[7;32;40m' + " Grøn! Kør " + '\x1b[0m')
     EVgreen.on()
     sleep(1)
-    print ('              \x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
+#    print ('              \x1b[7;32;40m' + " Grøn! pil " + '\x1b[0m')
     sleep(4)
     return GulVØ()
 
